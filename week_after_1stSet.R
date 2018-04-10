@@ -54,7 +54,7 @@ top_wds4 <- names(sort(wds4, decreasing=TRUE)[1:200])
 #head(top_wds4, 20)
 
 ##Now let's get the count of the top words used ##
-t4 <- wds4[names(wds4) %in% c(wds4)]
+t4 <- wds4[names(wds4) %in% c(top_wds4)]
 top4 <- data_frame(
   count= "Number",
   word=names(t4),
