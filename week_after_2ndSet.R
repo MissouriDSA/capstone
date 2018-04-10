@@ -55,7 +55,7 @@ top_wds5 <- names(sort(wds5, decreasing=TRUE)[1:200])
 #head(top_wds5, 20)
 
 ##Now let's get the count of the top words used ##
-t5 <- wds5[names(wds5) %in% c(wds5)]
+t5 <- wds5[names(wds5) %in% c(top_wds5)]
 top5 <- data_frame(
   count= "Number",
   word=names(t5),
