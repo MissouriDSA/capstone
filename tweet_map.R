@@ -8,4 +8,11 @@ mymap<- read.csv("C:/Users/Matt/Documents/ApptoMap/tweets.csv", stringsAsFactors
 m <- leaflet(mymap) %>% addTiles()
 
 
-m %>% addCircles(lng = ~longitude, lat = ~latitude, popup = mymap$type, weight = 8, radius = 40, color = "#fb3004", stroke = TRUE, fillOpacity = 0.6) 
+m %>% addCircles(lng = ~longitude, 
+                 lat = ~latitude, 
+                 popup = mymap$type, 
+                 weight = 8, 
+                 radius = 40, 
+                 color = "#fb3004", 
+                 stroke = TRUE, 
+                 fillOpacity = 0.6) 
