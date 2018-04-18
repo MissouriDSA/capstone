@@ -1,6 +1,8 @@
 library(plyr)
 library(tidyverse)
 
+sb_tweets_2 <- readRDS('sb_tweets_2')
+
 df2 = as.data.frame(sb_tweets_2)
 
 s2 <- df2$text
