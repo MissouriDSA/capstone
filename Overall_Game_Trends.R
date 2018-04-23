@@ -1,12 +1,8 @@
 library(tidyverse)
 library(rtweet)
 library(wordcloud)
-tweets1 = as.data.frame(tweets_set1)
-tweets2 = as.data.frame(tweets_set2)
-tweets3 = as.data.frame(tweets_set3)
 
-half = rbind(tweets1, tweets2)
-all = rbind(half, tweets3)
+live = as.data.frame(SuperBowlLive_additions)
 
 sbdf = as.data.frame(sb)
 sbdf <- sbdf[1:67,]
@@ -25,12 +21,13 @@ wordcloud(words=brands$brand_names, freq = brands$n, min.freq = 0,scale = c(1.7,
 #we should repeat this later with mentions added in ###
 #
 library(ggplot2)
-live = as.data.frame(SuperBowlLive_additions)
+
 a <- ggplot(data=live) + geom_bar(mapping = aes(x=Quarter,fill=Women_Speak),position="dodge") 
 ##
 a2<- a + scale_fill_manual(values=c("#377eb8","#FF1493","#A9A9A9")) 
 a2
-a2 + scale_x_discrete(labels=c("0"="Pregame","1"="1st","2"="Second","3"="Third","4"="Fourth","5"="Postgame"))
+##nope, use scale_x_continuous
+#a2 + scale_x_discrete(labels=c("0"="Pregame","1"="1st","2"="Second","3"="Third","4"="Fourth","5"="Postgame"))
 
 a2 + scale_x_continuous(name="Did women feature in commercials throughout the game?",breaks=c(0,1,1.5,2,2.5,3,3.5,4,5),labels=c("0"="Pregame","1"="1st","1.5"="1.5","2"="Second","2.5"="Halftime","3"="Third","3.5"="3.5","4"="Fourth","5"="Postgame"))
 
@@ -46,6 +43,19 @@ a5
 a6 <-ggplot(data=live) +geom_bar(mapping = aes(x=factor(1), fill=Women_Speak), width = 1) + coord_polar(theta = "y")+theme_void()
 a6 + scale_fill_manual(values=c("#377eb8","#FF1493","#A9A9A9"))
 ##
+
+a7 <- ggplot(data=live) + geom_bar(mapping = aes(x=Commercial, fill=Business)) 
+quarters <- scale_x_continuous(name="Enter Title Here",breaks=c(0,1,1.5,2,2.5,3,3.5,4,5),labels=c("0"="Pregame","1"="1st","1.5"="1.5","2"="Second","2.5"="Halftime","3"="Third","3.5"="3.5","4"="Fourth","5"="Postgame"))
+a7 + quarters
+a7
+a8 <- ggplot(data=live) + geom_bar(mapping = aes(x=factor(1), fill=Business), width = 1) + coord_polar(theta = "y") + theme_void() 
+a8
+
+
+auto <- live[live$Business=="Auto",]
+auto <- na.omit(auto)
+
+
 
 b <- ggplot(data=live) + geom_bar(mapping = aes(x=Quarter,fill=Category),position="dodge") 
 b
