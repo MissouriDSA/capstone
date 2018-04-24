@@ -1,0 +1,150 @@
+### This is the method in which I scraped Twitter for the tweets examined in my project.
+### "SuperBowlPOST.csv" is the file listing hashtags and brand names. All files can be found at:
+### https://drive.google.com/open?id=1lkcJ2w3E2dmTvPRhFlVol5ZVtS32K-S8
+
+## Read in the file and rename
+sb <- read.csv("SuperBowlPOST.csv", stringsAsFactors = FALSE)
+sb <- sb$hashtags
+
+## split file into workable subsets so we don't hit rate-limits on our token
+sb1 <- sb[1:24]
+sb2 <- sb[25:50]
+sb3 <- sb[51:88]
+
+### CODE FOR TOKEN CREATION IS IN FILE "create_token.R" in the capstone folder ###
+## use token created for my account
+token <- twitter_token
+
+## Collect Tweets
+# WEEK OF SUPER BOWL #
+rt_sb1 <- rtweet:::search_tweets(
+  paste(sb1, collapse = " OR "),
+  until = "2018-02-05", n = 3e5,
+  token = token,
+  retryonratelimit = TRUE)
+saveRDS(rt_sb1, "sb_1.rds")
+Sys.sleep(15 * 60)
+
+rt_sb2 <- rtweet:::search_tweets(
+  paste(sb2, collapse = " OR "),
+  until = "2018-02-05", n = 3e5,
+  token = token,
+  retryonratelimit = TRUE)
+saveRDS(rt_sb2, "sb_2.rds")
+Sys.sleep(15 * 60)
+
+rt_sb3 <- rtweet:::search_tweets(
+  paste(sb3, collapse = " OR "),
+  until = "2018-02-05", n = 3e5,
+  token = token,
+  retryonratelimit = TRUE)
+saveRDS(rt_sb3, "sb_3.rds")
+Sys.sleep(15 * 60)
+##################################
+
+# Week After #
+sb2 <- read.csv("SuperBowlPOST.csv", stringsAsFactors = FALSE)
+sb2 <- sb2$hashtags
+
+wa1 <- sb2[1:24]
+wa2 <- sb2[25:50]
+wa3 <- sb2[51:67]
+
+token <- twitter_token
+
+rt_wa1 <- rtweet:::search_tweets(
+  paste(wa1, collapse = " OR "),
+  until = "2018-02-05", n = 3e5,
+  token = token,
+  retryonratelimit = TRUE)
+saveRDS(rt_wa1, "week_after_sb_1.rds")
+Sys.sleep(15 * 60)
+
+rt_wa2 <- rtweet:::search_tweets(
+  paste(wa2, collapse = " OR "),
+  until = "2018-02-05", n = 3e5,
+  token = token,
+  retryonratelimit = TRUE)
+saveRDS(rt_wa2, "week_after_sb_2.rds")
+Sys.sleep(15 * 60)
+
+rt_wa3 <- rtweet:::search_tweets(
+  paste(wa3, collapse = " OR "),
+  until = "2018-02-05", n = 3e5,
+  token = token,
+  retryonratelimit = TRUE)
+saveRDS(rt_wa3, "week_after_sb_3.rds")
+Sys.sleep(15 * 60)
+#######################
+## (Same for two weeks after ##
+#######################
+
+# To get the counts, I tokenized the subsets and then merged them together.
+
+library(plyr)
+library(tidyverse)
+
+df1 = as.data.frame(sb_1) # use file names from scrape for each iteration
+
+s1 <- df1$text
+summary(s1)
+str(s1)
+
+#remove non-graphical characters
+s1 <- iconv(s1, 'UTF-8', 'ASCII')
+#remove non-graphical characters
+
+s1<- tolower(s1)
+head(s1,2)
+
+s1<- stringr::str_replace_all(s1, "@\\S+", "")
+s1 <- stringr::str_replace_all(s1, "https?:[[:graph:]]+", "")
+head(s1,3)
+
+s1 <-stringr::str_replace_all(s1, "#", "")
+head(s1,3)
+s1 <- stringr::str_replace_all(s1, "[[:punct:]]+\\b|\\b[[:punct:]]+", "")
+head(s1,3)
+
+
+s1 <- stringr::str_replace_all(s1, "\\n+", "")
+s1 <- stringr::str_replace_all(s1, "\\t+", "")
+s1 <- stringr::str_replace_all(s1, "[[\\s]]+\\A|[[\\s]]+\\Z", "")
+head(s1,3)
+
+w1 <- unlist(strsplit(s1, "\\s+"), use.names = FALSE)
+head(w1,20)
+
+## use stopwords list from rtweet
+stopwords <- rtweet::stopwordslangs$word[rtweet::stopwordslangs$p > .999]
+
+### There appeared to be an issue with the stopwords removal, so I also used the code in "snively_rm_stopwords.R"
+
+## remove stopwords
+ws1 <- lapply(w1, function(x) return(x[!tolower(x) %in% c("", stopwords)]))
+
+## remove all non-letter characters and drop empty tokens
+ws1 <- lapply(ws1, function(x) {
+  x <- stringr::str_replace_all(x, "\\W", "")
+  x[x != ""]
+})
+wds1 <- table(unlist(ws1))
+top_wds1 <- names(sort(wds1, decreasing=TRUE)[1:200])
+head(top_wds1, 20)
+
+t1 <- wds1[names(wds1) %in% c(top_wds1)]
+top1 <- data_frame(
+  count= "Number",
+  word=names(t1),
+  n=as.integer(t1)
+)
+arrange(top1, desc(n))
+################
+# From here, I ran the same code through the other sets and then combined each day for a complete "top words" count.
+
+half <- rbind(top_1,top_2)
+all <- rbind(half,top_3)
+top_df = as.data.frame(all)
+#################
+
+ttt1 = as.data.frame(top1)
