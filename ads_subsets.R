@@ -9,31 +9,18 @@ auto <- sb_simple[sb_simple$Business=="Auto",]
 auto <- na.omit(auto)
 
 cellular <- sb_simple[sb_simple$Business=="Cellular",] %>% na.omit(cellular)
-
 clothing <- sb_simple[sb_simple$Business=="Clothing",] %>% na.omit(clothing)
-
 electronics <- sb_simple[sb_simple$Business=="Electronics",] %>% na.omit(electronics)
-
 financial <- sb_simple[sb_simple$Business=="Financial",] %>% na.omit(financial)
-
 food <- sb_simple[sb_simple$Business=="Food",] %>% na.omit(food)
-
 gaming <- sb_simple[sb_simple$Business=="Gaming",] %>% na.omit(gaming)
-
 home <- sb_simple[sb_simple$Business=="Home",] %>% na.omit(home)
-
 lifestyle <- sb_simple[sb_simple$Business=="Lifestyle",] %>% na.omit(lifestyle)
-
 media <- sb_simple[sb_simple$Business=="Media",] %>% na.omit(media)
-
 movie <- sb_simple[sb_simple$Business=="Movie",] %>% na.omit(movie)
-
 news <- sb_simple[sb_simple$Business=="News",] %>% na.omit(news)
-
 sports <- sb_simple[sb_simple$Business=="Sports",] %>% na.omit(sports)
-
 travel <- sb_simple[sb_simple$Business=="Travel",] %>% na.omit(travel)
-
 tv <- sb_simple[sb_simple$Business=="TV",] %>% na.omit(tv)
 
 ## Now let's plot some business-specific charts!!!
@@ -44,7 +31,6 @@ ggplot(data=auto) + geom_point(mapping = aes(x=Commercial, y=Quarter, fill=Busin
 #overall ads by industry by quarter
 p1 <- ggplot(data=sb_simple) + geom_point(aes(x=Commercial, y=Quarter, color=Business))
 p1 + labs(title="Breaking down ads by quarter",x="Ads by Industry", y="Ads per Quarter")
-
 
 p2 <- ggplot(data=sb_simple) + geom_point(aes(x=Commercial, y=Quarter, shape=Women_Speak, color=Business))
 p2 + labs(title="Which industry lets women speak?",x="Ads Sequentially Aired", y="Ads by Quarter")
@@ -71,20 +57,15 @@ w_facet + theme(
   axis.text.x = element_text(angle=45),
   strip.text.y=element_text(angle=0))
 
-
-
 #################
 women_corp<-ggplot(data=sb_simple) + geom_point(mapping = aes(x=Corporation,y=Women_Speak, colour=Women_Speak)) + scale_color_manual(values=c("#377eb8","#FF1493"))
 wf<-women_corp + facet_grid(Business ~ ., scales="free",space="free")
 #################
-
-
 women_corp + theme(
   axis.ticks.y = element_blank(),
   axis.text.x = element_text(angle=90),
   strip.text.y=element_text(angle=0))
 ############
-
 wf + theme(
   axis.ticks.y = element_blank(),
   axis.text.x = element_text(angle=90),
@@ -114,7 +95,3 @@ ff2
 
 ff4<-ggplot(data=sb_simple) + geom_point(aes(Time, Corporation, color=Business))
 ff4
-
-#NE <- ggplot() + geom_line(sb_simple, )
-  
-#+ scale_color_manual(values = c(NE_score="#003366",PHI_score="#006400")) + geom_line(data=sb_simple, aes(x=Time,y=PHI_score))
