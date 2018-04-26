@@ -1,0 +1,12 @@
+## example format to run later
+require(twitteR)
+ 
+#pull list of tweets and convert to data fram
+##[CODE GOES HERE]##
+ 
+#As I've done in previous scripts, pull out the names of folk who have been "old-fashioned RTd"...
+require(stringr)
+trim <- function (x) sub('@','',x)
+ 
+tw.df$rt=sapply(tw.df$text,function(tweet) trim(str_match(tweet,"^RT (@[[:alnum:]_]*)")[2]))
+tw.df$rtt=sapply(tw.df$rt,function(rt) if (is.na(rt)) 'T' else 'RT')
